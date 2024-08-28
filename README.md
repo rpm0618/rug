@@ -5,7 +5,7 @@ Very alpha quality
 
 ## Comamnds
 - `/as`: Show the number of ticks until the next autosave
-- `/chunkDebug`: Create logs of chunk events, or connect directly to a (viewer)[https://github.com/rpm0618/mc_utils]. The viewer must be running on the same computer as the minecraft server.
+- `/chunkDebug`: Create logs of chunk events, or connect directly to a [viewer](https://github.com/rpm0618/mc_utils). The viewer must be running on the same computer as the minecraft server.
   - `/chunkDebug start`: Start recording chunk events
   - `/chunkDebug stop`: Stop recording chunk events and write them to a file
   - `/chunkDebug connect [port]`: Connect to the viewer linked above and show realtime chunk events

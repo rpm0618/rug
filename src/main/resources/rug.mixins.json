@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.rpm0618.rug.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CommandMixin",
+    "chunkdebug.EndChunkGeneratorMixin",
+    "chunkdebug.NetherChunkGeneratorMixin",
+    "chunkdebug.OverworldChunkGeneratorMixin",
+    "chunkdebug.ServerChunkCacheMixin",
+    "instantscheduling.WorldMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

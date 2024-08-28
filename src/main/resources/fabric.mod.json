@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "rug",
+	"version": "${version}",
+	"name": "Rug",
+	"description": "A technical utility mod for Minecraft 1.8",
+	"authors": [
+		"rpm0618"
+	],
+	"contact": {
+		"homepage": "https://github.com/rpm0618/rug",
+		"sources": "https://github.com/rpm0618/rug"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"init": [
+			"net.rpm0618.rug.Rug"
+		]
+	},
+	"mixins": [
+		"rug.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "1.8.8",
+		"osl-entrypoints": ">=0.4.0"
+	}
+}

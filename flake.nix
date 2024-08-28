@@ -25,7 +25,9 @@
                     packages = with pkgs; [
                         diffutils
                         gnupatch
-                        jdk8
+                        # java-language-server
+                        jdt-language-server
+                        jdk
                         libzip
                         minecraft
                         python2

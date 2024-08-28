@@ -1,0 +1,514 @@
+diff -ruN clean_src/minecraft_server/net/minecraft/command/ServerCommandManager.java src/minecraft_server/net/minecraft/command/ServerCommandManager.java
+--- clean_src/minecraft_server/net/minecraft/command/ServerCommandManager.java	2024-08-28 06:52:30.183743262 -0400
++++ src/minecraft_server/net/minecraft/command/ServerCommandManager.java	2024-08-28 07:31:52.933111562 -0400
+@@ -34,6 +34,11 @@
+ import net.minecraft.util.EnumChatFormatting;
+ import net.minecraft.util.IChatComponent;
+ 
++// RUG START
++import rug.command.CommandAS;
++import rug.command.CommandChunkDebug;
++// RUG END
++
+ public class ServerCommandManager extends CommandHandler implements IAdminCommand {
+    public ServerCommandManager() {
+       this.registerCommand(new CommandTime());
+@@ -99,6 +104,11 @@
+          this.registerCommand(new CommandPublishLocalServer());
+       }
+ 
++      // RUG START
++      this.registerCommand(new CommandAS());
++      this.registerCommand(new CommandChunkDebug());
++      // RUG END
++
+       CommandBase.setAdminCommander(this);
+    }
+ 
+diff -ruN clean_src/minecraft_server/net/minecraft/util/LongHashMap.java src/minecraft_server/net/minecraft/util/LongHashMap.java
+--- clean_src/minecraft_server/net/minecraft/util/LongHashMap.java	2024-08-28 06:52:30.183743262 -0400
++++ src/minecraft_server/net/minecraft/util/LongHashMap.java	2024-08-28 06:52:30.193743260 -0400
+@@ -1,7 +1,7 @@
+ package net.minecraft.util;
+ 
+ public class LongHashMap<V> {
+-   private transient LongHashMap.Entry<V>[] hashArray = new LongHashMap.Entry[4096];
++   /* private RUG */ public transient LongHashMap.Entry<V>[] hashArray = new LongHashMap.Entry[4096];
+    private transient int numHashElements;
+    private int mask;
+    private int capacity = 3072;
+@@ -149,10 +149,10 @@
+       }
+    }
+ 
+-   static class Entry<V> {
++   /* RUG START */ public /*RUG END */ static class Entry<V> {
+       final long key;
+       V value;
+-      LongHashMap.Entry<V> nextEntry;
++      /* RUG START */ public /* RUG END */LongHashMap.Entry<V> nextEntry;
+       final int hash;
+ 
+       Entry(int p_i1553_1_, long p_i1553_2_, V p_i1553_4_, LongHashMap.Entry<V> p_i1553_5_) {
+diff -ruN clean_src/minecraft_server/net/minecraft/world/gen/ChunkProviderGenerate.java src/minecraft_server/net/minecraft/world/gen/ChunkProviderGenerate.java
+--- clean_src/minecraft_server/net/minecraft/world/gen/ChunkProviderGenerate.java	2024-08-28 06:52:30.183743262 -0400
++++ src/minecraft_server/net/minecraft/world/gen/ChunkProviderGenerate.java	2024-08-28 07:06:55.843507329 -0400
+@@ -25,6 +25,10 @@
+ import net.minecraft.world.gen.structure.MapGenVillage;
+ import net.minecraft.world.gen.structure.StructureOceanMonument;
+ 
++// RUG START
++import rug.command.CommandChunkDebug;
++// RUG END
++
+ public class ChunkProviderGenerate implements IChunkProvider {
+    private Random rand;
+    private NoiseGeneratorOctaves field_147431_j;
+@@ -301,6 +305,13 @@
+    }
+ 
+    public void populate(IChunkProvider p_73153_1_, int p_73153_2_, int p_73153_3_) {
++
++      // RUG START
++      if (CommandChunkDebug.chunkDebugEnabled) {
++          CommandChunkDebug.onChunkPopulated(p_73153_2_ , p_73153_3_, this.worldObj, null);
++      }
++      // RUG END
++
+       BlockFalling.fallInstantly = true;
+       int i = p_73153_2_ * 16;
+       int j = p_73153_3_ * 16;
+diff -ruN clean_src/minecraft_server/net/minecraft/world/gen/ChunkProviderServer.java src/minecraft_server/net/minecraft/world/gen/ChunkProviderServer.java
+--- clean_src/minecraft_server/net/minecraft/world/gen/ChunkProviderServer.java	2024-08-28 06:52:30.183743262 -0400
++++ src/minecraft_server/net/minecraft/world/gen/ChunkProviderServer.java	2024-08-28 07:07:18.973501807 -0400
+@@ -25,6 +25,10 @@
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
++// RUG START
++import rug.command.CommandChunkDebug;
++// RUG END
++
+ public class ChunkProviderServer implements IChunkProvider {
+    private static final Logger logger = LogManager.getLogger();
+    private Set<Long> droppedChunksSet = Collections.<Long>newSetFromMap(new ConcurrentHashMap());
+@@ -32,7 +36,7 @@
+    private IChunkProvider serverChunkGenerator;
+    private IChunkLoader chunkLoader;
+    public boolean chunkLoadOverride = true;
+-   private LongHashMap<Chunk> id2ChunkMap = new LongHashMap();
++   /* private RUG */ public LongHashMap<Chunk> id2ChunkMap = new LongHashMap();
+    private List<Chunk> loadedChunks = Lists.<Chunk>newArrayList();
+    private WorldServer worldObj;
+ 
+@@ -55,9 +59,21 @@
+       if(this.worldObj.provider.canRespawnHere()) {
+          if(!this.worldObj.isSpawnChunk(p_73241_1_, p_73241_2_)) {
+             this.droppedChunksSet.add(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(p_73241_1_, p_73241_2_)));
++
++            // RUG START
++            if (CommandChunkDebug.chunkDebugEnabled) {
++                CommandChunkDebug.onChunkUnloadScheduled(p_73241_1_, p_73241_2_, this.worldObj, null);
++            }
++            // RUG END
+          }
+       } else {
+          this.droppedChunksSet.add(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(p_73241_1_, p_73241_2_)));
++
++         // RUG START
++         if (CommandChunkDebug.chunkDebugEnabled) {
++             CommandChunkDebug.onChunkUnloadScheduled(p_73241_1_, p_73241_2_, this.worldObj, null);
++         }
++         // RUG END
+       }
+    }
+ 
+@@ -79,6 +95,12 @@
+             } else {
+                try {
+                   chunk = this.serverChunkGenerator.provideChunk(p_73158_1_, p_73158_2_);
++
++                  // RUG START
++                  if (CommandChunkDebug.chunkDebugEnabled) {
++                      CommandChunkDebug.onChunkGenerated(p_73158_1_, p_73158_2_, this.worldObj, null);
++                  }
++                 // RUG END
+                } catch (Throwable throwable) {
+                   CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception generating new chunk");
+                   CrashReportCategory crashreportcategory = crashreport.makeCategory("Chunk to be generated");
+@@ -89,6 +111,13 @@
+                }
+             }
+          }
++         // RUG START
++         else {
++             if (CommandChunkDebug.chunkDebugEnabled) {
++                 CommandChunkDebug.onChunkLoaded(p_73158_1_, p_73158_2_, this.worldObj, null);
++             }
++         }
++         // RUG END
+ 
+          this.id2ChunkMap.add(i, chunk);
+          this.loadedChunks.add(chunk);
+@@ -210,6 +239,12 @@
+                   this.saveChunkExtraData(chunk);
+                   this.id2ChunkMap.remove(olong.longValue());
+                   this.loadedChunks.remove(chunk);
++
++                  // RUG START
++                  if (CommandChunkDebug.chunkDebugEnabled) {
++                      CommandChunkDebug.onChunkUnloaded(chunk.xPosition, chunk.zPosition, this.worldObj, null);
++                  }
++                  // RUG END
+                }
+ 
+                this.droppedChunksSet.remove(olong);
+diff -ruN clean_src/minecraft_server/rug/command/CommandAS.java src/minecraft_server/rug/command/CommandAS.java
+--- clean_src/minecraft_server/rug/command/CommandAS.java	1969-12-31 19:00:00.000000000 -0500
++++ src/minecraft_server/rug/command/CommandAS.java	2024-08-28 07:32:50.013095810 -0400
+@@ -0,0 +1,29 @@
++package rug.command;
++
++import net.minecraft.server.MinecraftServer;
++import net.minecraft.util.ChatComponentText;
++
++import net.minecraft.command.CommandBase;
++import net.minecraft.command.ICommandSender;
++import net.minecraft.command.CommandException;
++
++public class CommandAS extends CommandBase {
++
++    @Override
++    public String getCommandName() {
++        return "as";
++    }
++
++    @Override
++    public String getCommandUsage(ICommandSender sender) {
++        return "/as";
++    }
++
++    @Override
++    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
++        MinecraftServer server = MinecraftServer.getServer();
++        int ticksToAutosave = 900 - (server.getTickCounter() % 900);
++        sender.addChatMessage(new ChatComponentText("To Autosave: " + ticksToAutosave));
++    }
++
++}
+diff -ruN clean_src/minecraft_server/rug/command/CommandChunkDebug.java src/minecraft_server/rug/command/CommandChunkDebug.java
+--- clean_src/minecraft_server/rug/command/CommandChunkDebug.java	1969-12-31 19:00:00.000000000 -0500
++++ src/minecraft_server/rug/command/CommandChunkDebug.java	2024-08-28 07:13:06.613409810 -0400
+@@ -0,0 +1,312 @@
++package rug.command;
++
++import java.io.BufferedWriter;
++import java.io.FileWriter;
++import java.io.IOException;
++import java.io.PrintWriter;
++import java.io.StringWriter;
++import java.net.Socket;
++import java.text.SimpleDateFormat;
++import java.util.ArrayList;
++import java.util.Base64;
++import java.util.Date;
++import java.util.List;
++import java.util.concurrent.ConcurrentLinkedQueue;
++
++import net.minecraft.server.MinecraftServer;
++import net.minecraft.util.BlockPos;
++import net.minecraft.util.ChatComponentText;
++import net.minecraft.util.JsonUtils;
++import net.minecraft.util.LongHashMap;
++import net.minecraft.util.LongHashMap.Entry;
++import net.minecraft.world.World;
++import net.minecraft.world.chunk.Chunk;
++import net.minecraft.world.gen.ChunkProviderServer;
++import net.minecraft.command.CommandBase;
++import net.minecraft.command.ICommandSender;
++import net.minecraft.command.CommandException;
++
++import com.google.gson.*;
++
++public class CommandChunkDebug extends CommandBase {
++
++    private static class ChunkMetadata {
++        private static class ChunkMetadataJson {
++            String stackTrace;
++            String custom;
++        }
++
++        StackTraceElement[] stackTrace;
++        String custom;
++
++        public String toJson() {
++            ChunkMetadataJson metadata = new ChunkMetadataJson();
++            metadata.custom = custom;
++
++            StringWriter sw = new StringWriter();
++            PrintWriter pw = new PrintWriter(sw);
++            for (int i = 0; i < this.stackTrace.length; i++) {
++                pw.println(this.stackTrace[i].toString());
++            }
++            metadata.stackTrace = sw.toString();
++
++            Gson gson = new Gson();
++            return gson.toJson(metadata);
++        }
++    }
++
++    private static class ChunkEntrySender implements Runnable {
++
++        ConcurrentLinkedQueue<ChunkDebugEntry> entryQueue;
++
++        ICommandSender sender;
++
++        boolean running;
++
++        int port;
++
++        ChunkEntrySender(ConcurrentLinkedQueue<ChunkDebugEntry> entryQueue, ICommandSender sender, int port) {
++            this.entryQueue = entryQueue;
++            this.running = true;
++            this.sender = sender;
++            this.port = port;
++        }
++
++        @Override
++        public void run() {
++            try {
++                Socket socket = new Socket("127.0.0.1", this.port);
++
++                this.sender.addChatMessage(new ChatComponentText("Connected to chunk debug server"));
++
++                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
++
++                while(this.running) {
++                    ChunkDebugEntry entry = this.entryQueue.poll();
++                    while (entry != null) {
++                        entry.write(out);
++                        entry = this.entryQueue.poll();
++                    }
++                    out.flush();
++                    Thread.sleep(50);
++                }
++
++                out.flush();
++                out.close();
++
++                socket.close();
++
++
++                this.sender.addChatMessage(new ChatComponentText("Disconnected to chunk debug server"));
++            } catch (IOException exception) {
++                this.sender.addChatMessage(new ChatComponentText("Error talking to chunk debug server, check console"));
++                CommandChunkDebug.chunkDebugEnabled = false;
++                exception.printStackTrace();
++            } catch (InterruptedException e) {
++                e.printStackTrace();
++            }
++        }
++
++        public void stop() {
++            this.running = false;
++        }
++
++    }
++
++    private static class ChunkDebugEntry {
++        int x;
++        int z;
++        int tick;
++        int world;
++        String event;
++        ChunkMetadata metadata;
++
++        ChunkDebugEntry(int x, int z, int tick, int world, String event, ChunkMetadata metadata) {
++            this.x = x;
++            this.z = z;
++            this.tick = tick;
++            this.world = world;
++            this.event = event;
++            this.metadata = metadata;
++        }
++
++        public void write(PrintWriter pw) {
++            String metadataStr = Base64.getEncoder().encodeToString(metadata.toJson().getBytes());
++
++            // Avoid carriage return
++            String out = x + "," + z + "," + tick + "," + world + "," + event + "," + metadataStr + "\n";
++            pw.print(out);
++        }
++    }
++
++    public static boolean chunkDebugEnabled = false;
++
++    private static ConcurrentLinkedQueue<ChunkDebugEntry> entries = new ConcurrentLinkedQueue<ChunkDebugEntry>();
++
++    public static int currentDimension = 0;
++
++    private static ChunkEntrySender chunkSender = null;
++
++    @Override
++    public String getCommandName() {
++        return "chunkDebug";
++    }
++
++    @Override
++    public String getCommandUsage(ICommandSender sender) {
++        return "/chunkDebug <start|stop|connect|disconnect> [port]";
++    }
++
++    @Override
++    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
++        if (args.length < 1) {
++            sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
++            return;
++        }
++
++        if (args[0].toLowerCase().equals("start")) {
++            startChunkDebug(sender);
++        } else if (args[0].toLowerCase().equals("stop")) {
++            stopChunkDebug(sender);
++        } else if (args[0].toLowerCase().equals("connect")) {
++            int port = 20000;
++            if (args.length >= 2) {
++                try {
++                    port = Integer.parseInt(args[1], 10);
++                } catch (NumberFormatException e) {
++                    sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
++                    return;
++                }
++            }
++            connect(sender, port);
++        } else if (args[0].toLowerCase().equals("disconnect")) {
++            disconnect(sender);
++        } else {
++            sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
++            return;
++        }
++    }
++
++    @Override
++    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
++        if (args.length == 1) {
++            return getListOfStringsMatchingLastWord(args, new String[]{"start", "stop", "connect", "disconnect"});
++        }
++        return new ArrayList<String>();
++    }
++
++    @Override
++    public int getRequiredPermissionLevel() {
++        return 0;
++    }
++
++    private static void connect(ICommandSender sender, int port) {
++        if (chunkDebugEnabled) {
++            sender.addChatMessage(new ChatComponentText("Already enabled"));
++            return;
++        }
++
++        chunkDebugEnabled = true;
++        entries.clear();
++
++        chunkSender = new ChunkEntrySender(entries, sender, port);
++        new Thread(chunkSender, "Chunk Debug Thread").start();
++
++        addAlreadyLoadedChunks();
++    }
++
++    private static void disconnect(ICommandSender sender) {
++        chunkDebugEnabled = false;
++        if (chunkSender != null) {
++            chunkSender.stop();
++        }
++    }
++
++    private static void startChunkDebug(ICommandSender sender) {
++        if (chunkDebugEnabled) {
++            sender.addChatMessage(new ChatComponentText("Already enabled"));
++            return;
++        }
++
++        sender.addChatMessage(new ChatComponentText("Recording chunk events"));
++
++        chunkDebugEnabled = true;
++        entries.clear();
++
++        addAlreadyLoadedChunks();
++    }
++
++    private static void addAlreadyLoadedChunks() {
++        MinecraftServer server = MinecraftServer.getServer();
++        for (int i = 0; i < server.worldServers.length; i++) {
++            World world = server.worldServers[i];
++            ChunkProviderServer provider = (ChunkProviderServer)(world.getChunkProvider());
++            LongHashMap<Chunk> hashMap = provider.id2ChunkMap;
++            for (int j = 0; j < hashMap.hashArray.length; j++) {
++                Entry<Chunk> curEntry = hashMap.hashArray[j];
++                while (curEntry != null) {
++                    Chunk chunk = curEntry.getValue();
++                    entries.add(new ChunkDebugEntry(chunk.xPosition, chunk.zPosition, getCurrentTick(), i, "ALREADY_LOADED", collectMetadata(null)));
++                    curEntry = curEntry.nextEntry;
++                }
++            }
++        }
++    }
++
++    private static void stopChunkDebug(ICommandSender sender) throws CommandException {
++        chunkDebugEnabled = false;
++        String fileName = "chunkDebug-" + new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS").format(new Date()) + ".csv";
++        try {
++            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
++            ChunkDebugEntry entry = entries.poll();
++            while (entry != null) {
++                entry.write(pw);
++                entry = entries.poll();
++            }
++
++            pw.flush();
++            pw.close();
++
++            sender.addChatMessage(new ChatComponentText("Writing to file: " + fileName));
++        } catch (Exception ex) {
++            ex.printStackTrace();
++            throw new CommandException(ex.getMessage());
++        }
++    }
++
++    private static int getCurrentTick() {
++        return MinecraftServer.getServer().getTickCounter();
++    }
++
++    private static ChunkMetadata collectMetadata(String custom) {
++        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
++        ChunkMetadata metadata = new ChunkMetadata();
++        metadata.custom = custom;
++        metadata.stackTrace = stackTrace;
++        return metadata;
++    }
++
++    private static int getDimensionFromWorld(World world) {
++        return world.provider.getDimensionId();
++    }
++
++    public static void onChunkLoaded(int x, int z, World world, String custom) {
++        entries.add(new ChunkDebugEntry(x, z, getCurrentTick(), getDimensionFromWorld(world), "LOADED", collectMetadata(custom)));
++    }
++
++    public static void onChunkGenerated(int x, int z, World world, String custom) {
++        entries.add(new ChunkDebugEntry(x, z, getCurrentTick(), getDimensionFromWorld(world), "GENERATED", collectMetadata(custom)));
++    }
++
++    public static void onChunkPopulated(int x, int z, World world, String custom) {
++        entries.add(new ChunkDebugEntry(x, z, getCurrentTick(), getDimensionFromWorld(world), "POPULATED", collectMetadata(custom)));
++    }
++
++    public static void onChunkUnloadScheduled(int x, int z, World world, String custom) {
++        entries.add(new ChunkDebugEntry(x, z, getCurrentTick(), getDimensionFromWorld(world), "UNLOAD_SCHEDULED", collectMetadata(custom)));
++    }
++
++    public static void onChunkUnloaded(int x, int z, World world, String custom) {
++        entries.add(new ChunkDebugEntry(x, z, getCurrentTick(), getDimensionFromWorld(world), "UNLOADED", collectMetadata(custom)));
++    }
++}

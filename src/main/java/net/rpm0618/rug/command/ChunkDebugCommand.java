@@ -74,7 +74,6 @@ public class ChunkDebugCommand extends AbstractCommand {
         @Override
         public void run() {
             try {
-                System.out.println("PORT: " + this.port);
                 Socket socket = new Socket("127.0.0.1", this.port);
 
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

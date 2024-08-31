@@ -18,6 +18,7 @@
 			"net.rpm0618.rug.Rug"
 		]
 	},
+  "accessWidener": "rug.accesswidener",
 	"mixins": [
 		"rug.mixins.json"
 	],

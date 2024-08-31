@@ -5,11 +5,17 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CommandMixin",
+    "accessors.ChunkMapHolderAccessor",
+    "accessors.Long2ObjectHashMapAccessor",
+    "accessors.Long2ObjectHashMapNodeAccessor",
+    "accessors.ServerChunkCacheAccessor",
+    "accessors.WorldAccessor",
+    "asyncbeacons.BeaconBlockMixin",
     "chunkdebug.EndChunkGeneratorMixin",
     "chunkdebug.NetherChunkGeneratorMixin",
     "chunkdebug.OverworldChunkGeneratorMixin",
     "chunkdebug.ServerChunkCacheMixin",
-    "instantscheduling.WorldMixin"
+    "regenerate.ChunkMapMixin"
   ],
   "client": [
   ],

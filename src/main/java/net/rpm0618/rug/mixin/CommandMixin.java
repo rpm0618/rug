@@ -3,10 +3,7 @@ package net.rpm0618.rug.mixin;
 import net.minecraft.server.command.handler.CommandManager;
 import net.minecraft.server.command.handler.CommandRegistry;
 import net.rpm0618.rug.Rug;
-import net.rpm0618.rug.command.AutosaveCommand;
-import net.rpm0618.rug.command.ChunkDebugCommand;
-import net.rpm0618.rug.command.InstantFallCommand;
-import net.rpm0618.rug.command.InstantSchedulingCommand;
+import net.rpm0618.rug.command.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +16,12 @@ public abstract class CommandMixin extends CommandRegistry {
 	private void registerCommands(CallbackInfo ci) {
 		this.register(new AutosaveCommand());
 		this.register(new ChunkDebugCommand());
+		this.register(new HashCommand());
 		this.register(new InstantFallCommand());
 		this.register(new InstantSchedulingCommand());
+		this.register(new LagspikeCommand());
+		this.register(new RegenerateCommand());
+		this.register(new RepopulateCommand());
+		this.register(new RugCommand());
 	}
 }

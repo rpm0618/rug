@@ -1,13 +1,10 @@
 package net.rpm0618.rug.command;
 
-import net.minecraft.block.FallingBlock;
 import net.minecraft.server.command.AbstractCommand;
 import net.minecraft.server.command.exception.CommandException;
 import net.minecraft.server.command.source.CommandSource;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
-import net.minecraft.world.World;
-import net.rpm0618.rug.helpers.InstantSchedulingHelper;
+import net.rpm0618.rug.mixin.accessors.WorldAccessor;
 
 public class InstantSchedulingCommand extends AbstractCommand {
 	@Override
@@ -22,18 +19,18 @@ public class InstantSchedulingCommand extends AbstractCommand {
 
 	@Override
 	public void run(CommandSource source, String[] args) throws CommandException {
-		InstantSchedulingHelper world = (InstantSchedulingHelper) source.asEntity().getSourceWorld();
+		WorldAccessor world = (WorldAccessor) source.asEntity().getSourceWorld();
 
 		if (args.length < 1) {
-			source.sendMessage(new LiteralText("Instant Scheduling: " + world.rug$getInstantScheduling()));
+			source.sendMessage(new LiteralText("Instant Scheduling: " + world.getDoTicksImmediately()));
 			return;
 		}
 
 		if (args[0].equalsIgnoreCase("true")) {
-			world.rug$setInstantScheduling(true);
+			world.setDoTicksImmediately(true);
 			source.sendMessage(new LiteralText("Enabling Instant Scheduling"));
 		} else if (args[0].equalsIgnoreCase("false")) {
-			world.rug$setInstantScheduling(false);
+			world.setDoTicksImmediately(false);
 			source.sendMessage(new LiteralText("Disabling Instant Scheduling"));
 		} else {
 			source.sendMessage(new LiteralText(getUsage(source)));

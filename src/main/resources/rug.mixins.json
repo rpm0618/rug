@@ -15,6 +15,9 @@
     "chunkdebug.NetherChunkGeneratorMixin",
     "chunkdebug.OverworldChunkGeneratorMixin",
     "chunkdebug.ServerChunkCacheMixin",
+    "debug.DungeonFeatureMixin",
+    "debug.LiquidFallFeatureMixin",
+    "debug.LiquidPocketFeatureMixin",
     "regenerate.ChunkMapMixin"
   ],
   "client": [
@@ -22,6 +25,7 @@
   "server": [
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 3
 	}
 }

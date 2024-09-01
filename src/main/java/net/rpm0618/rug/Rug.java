@@ -13,7 +13,7 @@ public class Rug implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LogManager.getLogger("Rug");
 
-	public static final String VERSION = "0.3.0";
+	public static final String VERSION = "0.4.0";
 
     @Override
     public void init() {

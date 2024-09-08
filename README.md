@@ -26,8 +26,10 @@ Very alpha quality
 
 ## Rules
 - `asyncBeaconUpdates <true|false>`: If true, beacon blocks give our asynchronous updates when redstone powered.
-- `debugDungeonPopulation <true|false>`: If true, print information on attempted dungeon population locations.
-- `debugLiquidPopulation <true|false>`: If true, print information on attempted liquid pocket population locations.
+- `asyncCrashFix <true|false>`: If true, prevent the most common async crash in the chunk map
+- `debugDungeonPopulation <true|false>`: If true, print information on attempted dungeon populations to the console
+- `debugLiquidPopulation <true|false>`: If true, print information on attempted liquid pocket populations to the console
+- `updateSuppressionSponge <true|false>`: If true, updating a sponge block will trigger an update suppression
 
 ## Installation
 Use the [ornithe](https://ornithemc.net/) installer to install Minecraft 1.8.8 using Fabric as the mod loader (Installation is similar to fabric in later versions). 

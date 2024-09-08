@@ -1,4 +1,4 @@
-package net.rpm0618.rug.mixin.asyncbeacons;
+package net.rpm0618.rug.mixin.async;
 
 import net.minecraft.block.BeaconBlock;
 import net.minecraft.block.Block;

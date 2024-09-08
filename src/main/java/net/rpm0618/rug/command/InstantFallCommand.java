@@ -5,6 +5,10 @@ import net.minecraft.server.command.AbstractCommand;
 import net.minecraft.server.command.exception.CommandException;
 import net.minecraft.server.command.source.CommandSource;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstantFallCommand extends AbstractCommand {
 	@Override
@@ -38,5 +42,10 @@ public class InstantFallCommand extends AbstractCommand {
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 0;
+	}
+
+	@Override
+	public List<String> getSuggestions(CommandSource source, String[] args, BlockPos pos) {
+		return suggestMatching(args, "true", "false");
 	}
 }

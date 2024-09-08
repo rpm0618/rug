@@ -1,5 +1,6 @@
 package net.rpm0618.rug;
 
+import net.minecraft.util.crash.CrashReport;
 import net.rpm0618.rug.rules.RuleManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,11 +14,13 @@ public class Rug implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LogManager.getLogger("Rug");
 
-	public static final String VERSION = "0.4.0";
+	public static final String VERSION = "0.5.0";
 
     @Override
     public void init() {
         LOGGER.info("Initializing Rug");
 		RuleManager.init();
+		// Ensure CrashReport class is loaded for stack overflow crashes
+		CrashReport report = new CrashReport("", null);
     }
 }

@@ -10,7 +10,8 @@
     "accessors.Long2ObjectHashMapNodeAccessor",
     "accessors.ServerChunkCacheAccessor",
     "accessors.WorldAccessor",
-    "asyncbeacons.BeaconBlockMixin",
+    "async.BeaconBlockMixin",
+    "async.ChunkMapMixin",
     "chunkdebug.EndChunkGeneratorMixin",
     "chunkdebug.NetherChunkGeneratorMixin",
     "chunkdebug.OverworldChunkGeneratorMixin",
@@ -18,7 +19,8 @@
     "debug.DungeonFeatureMixin",
     "debug.LiquidFallFeatureMixin",
     "debug.LiquidPocketFeatureMixin",
-    "regenerate.ChunkMapMixin"
+    "regenerate.ChunkMapMixin",
+    "updatesuppression.SpongeBlockMixin"
   ],
   "client": [
   ],

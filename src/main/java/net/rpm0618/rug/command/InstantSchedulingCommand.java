@@ -22,7 +22,7 @@ public class InstantSchedulingCommand extends AbstractCommand {
 
 	@Override
 	public void run(CommandSource source, String[] args) throws CommandException {
-		WorldAccessor world = (WorldAccessor) source.asEntity().getSourceWorld();
+		WorldAccessor world = (WorldAccessor) source.getSourceWorld();
 
 		if (args.length < 1) {
 			source.sendMessage(new LiteralText("Instant Scheduling: " + world.getDoTicksImmediately()));

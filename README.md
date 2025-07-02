@@ -38,4 +38,4 @@ Run Minecraft (using `fabric-server-launch.jar` if a server) once, then place th
 ## Development
 With a recent JDK installed, `./gradlew idea` or `./gradlew eclipse` (`gradlew.bat` on Windows) will generate project files for the respective IDEs.
 
-If you don't want to use and IDE, you can use `./gradlew runClient` or `./gradlew runServer` to run changes as you're developing, and `./gradlew build` to build the final jar.
+If you don't want to use an IDE, you can use `./gradlew runClient` or `./gradlew runServer` to run changes as you're developing, and `./gradlew build` to build the final jar.

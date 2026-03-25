@@ -44,9 +44,13 @@ public class ChunkDebugCommand extends AbstractCommand {
 
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
-            for (int i = 0; i < this.stackTrace.length; i++) {
-                pw.println(this.stackTrace[i].toString());
-            }
+			for (StackTraceElement stackTraceElement : this.stackTrace) {
+				String className = stackTraceElement.getClassName();
+				String methodName = stackTraceElement.getMethodName();
+				String fileName = stackTraceElement.getFileName();
+				int lineNumber = stackTraceElement.getLineNumber();
+				pw.println(className + "." + methodName + "(" + fileName + ":" + lineNumber + ")");
+			}
             metadata.stackTrace = sw.toString();
 
             Gson gson = new Gson();
